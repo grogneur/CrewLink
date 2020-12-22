@@ -2,10 +2,12 @@ import React, { useEffect, useReducer, useState } from 'react';
 import ReactDOM from 'react-dom';
 import Voice from './Voice';
 import Menu from './Menu';
+import Tooltip from 'react-tooltip-lite';
 import { ipcRenderer, remote } from 'electron';
 import { AmongUsState } from '../common/AmongUsState';
 import Settings, { settingsReducer } from './Settings';
 import { GameStateContext, SettingsContext } from './contexts';
+import RefreshIcon from '@material-ui/icons/Refresh';
 
 let appVersion = '';
 if (typeof window !== 'undefined' && window.location) {
@@ -78,7 +80,14 @@ function App() {
 		<GameStateContext.Provider value={gameState}>
 			<SettingsContext.Provider value={settings}>
 				<div className="titlebar">
-					<span className="title">CrewLink{appVersion}</span>
+
+                    <Tooltip content="Restart the application (CTRL+R)" className="target" direction="down-start" distance={30} arrow={false}>
+                        <RefreshIcon width="20px" height="20px" preserveAspectRatio="none" className="titlebar-button refresh" onClick={() => {
+                            remote.getCurrentWindow().reload();
+                        }}></RefreshIcon>
+                    </Tooltip>
+                    
+                    <span className="title">CrewLink{appVersion}</span>
 					<svg className="titlebar-button settings" onClick={() => setSettingsOpen(!settingsOpen)} enableBackground="new 0 0 24 24" viewBox="0 0 24 24" fill="#868686" width="20px" height="20px">
 						<g>
 							<path d="M0,0h24v24H0V0z" fill="none" />
